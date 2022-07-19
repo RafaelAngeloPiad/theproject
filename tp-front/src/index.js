@@ -5,21 +5,21 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home.js";
-import Blogs from "./pages/Blogs.js";
-import FullBlog from "./pages/FullBlog.js";
+import Searchbar from "./components/Searchbar";
+import Headlines from "./pages/Headlines.js";
+import Everything from "./pages/Everything.js";
+//import FullBlog from "./pages/FullBlog.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Navbar />
-
+    <Searchbar />
     <Routes>
-      <Route path="/" exact element={<Home />} />
-      <Route path="Blogs">
-        <Route path="" element={<Blogs />} />
-      </Route>
-      <Route path="/FullBlogs/:title" exact element={<FullBlog />} />
+      <Route path="/" exact element={<Headlines />} />
+      <Route path="/Headlines" exact element={<Headlines />} />
+      <Route path="/Everything" exact element={<Everything />} />
+      {/* <Route path="/FullBlogs/:title" exact element={<FullBlog />} /> */}
     </Routes>
   </BrowserRouter>
 );
