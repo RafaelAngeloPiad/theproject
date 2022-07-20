@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import Select from "react-select";
 import { useState, useEffect } from "react";
+import Creatable, { useCreatable } from "react-select/creatable";
 import AsyncSelect from "react-select/async";
-import UrlManager from "./UrlManager";
+import UrlManager, { sourcesLink } from "./UrlManager";
 import useFetchArticles from "./useFetchArticles";
 import useFetchSources from "./useFetchSources";
 
@@ -12,9 +13,22 @@ import {
   SearchField,
   SearchBarContainer,
   SearchFieldContainer,
+  BtnContainer,
+  SearchBtn,
 } from "./SearchbarElements";
 
-const Searchbar = () => {
+const Searchbar = ({ endPoint, disable }) => {
+  const [url, setUrl] = useState("");
+  const [qContent, setQ] = useState("");
+  const [country, setCountry] = useState("");
+  const [category, setCategory] = useState("");
+  const [sources, setSources] = useState([]);
+  const [sourcesOptions, setSourcesOptions] = useState([]);
+  const [domains, setDomains] = useState("");
+  const [language, setLanguage] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const searchBarInput = useRef();
+
   const countryOptions = [
     { value: "ar", label: "Argentina" },
     { value: "au", label: "Australia" },
@@ -114,35 +128,112 @@ const Searchbar = () => {
     setCategory(selectedOption.value);
   };
 
-  const linkUpdate = () => {
-    UrlManager("everything", qContent, country, category, "", "");
+  const onSourcesChange = (selectedOption) => {
+    console.log(selectedOption);
+    setSources(selectedOption);
+  };
+  const onDomainChange = (selectedOption) => {
+    console.log(selectedOption.value);
+    setDomains(selectedOption.value);
   };
 
-  const {
-    data: sources,
-    isPending,
-    error,
-  } = useFetchSources(
-    "https://newsapi.org/v2/top-headlines/sources?apiKey=e6ba7f00ce054bfca62e6e40ce9e05d8"
-  );
-  const [qContent, setQ] = useState("");
-  const [country, setCountry] = useState("");
-  const [category, setCategory] = useState("");
+  const onLangChange = (selectedOption) => {
+    console.log(selectedOption.value);
+    setLanguage(selectedOption.value);
+  };
+
+  const onSortByChange = (selectedOption) => {
+    console.log(selectedOption.value);
+    setSortBy(selectedOption.value);
+  };
+
+  const linkUpdate = () => {
+    setUrl(
+      UrlManager(
+        endPoint,
+        qContent,
+        country,
+        category,
+        sources,
+        domains,
+        language,
+        sortBy
+      )
+    );
+  };
+  //sources muna bago mag language[]
+  //https://github.com/mdeveloper20/reactReminder/blob/react-select-creatable/src/Register/Register.js para to sa search nung sa domains
 
   const getSources = () => {
-    console.log(JSON.stringify(sources));
+    fetch(
+      "https://newsapi.org/v2/top-headlines/sources?apiKey=c118f2ca32d040e8908e5a5bc7738af9"
+    )
+      .then((data) => data.json())
+      .then((data) => {
+        var cnt = 0;
+        var sourceIds = [];
+
+        while (data.sources[cnt] != null) {
+          sourceIds.push({
+            label: data.sources[cnt].name,
+            value: data.sources[cnt].id,
+          });
+          cnt++;
+        }
+
+        //sources = sourceIds;
+        //sources.map((opt) => ({ label: data.name, value: data.value }));
+
+        setSourcesOptions(sourceIds);
+      });
   };
+  //HOY NAKIKITA YUNG DOMAIN SA JSON NG KADA ARTICLE TINGNAN MO BOBO
+  //   "source": {
+  //     "id": null,
+  //     "name": "Kami.com.ph"
+  // },
+  useEffect(() => {
+    getSources();
+  }, []);
+
+  useEffect(() => {
+    setUrl(
+      UrlManager(
+        endPoint,
+        qContent,
+        country,
+        category,
+        sources,
+        domains,
+        language,
+        sortBy
+      )
+    );
+  }, [
+    endPoint,
+    qContent,
+    country,
+    category,
+    sources,
+    domains,
+    language,
+    sortBy,
+  ]);
 
   return (
     <SearchBarContainer>
-      {getSources()}
       <SearchFieldContainer>
-        <SearchField
-          placeholder="search"
-          onChange={(event) => {
-            setQ(event.target.value);
-          }}
-        />
+        <SearchField placeholder="search" ref={searchBarInput} />
+
+        <BtnContainer>
+          <SearchBtn
+            onClick={(event) => {
+              setQ(searchBarInput.current.value);
+            }}
+          >
+            Search
+          </SearchBtn>
+        </BtnContainer>
       </SearchFieldContainer>
 
       <DropdownContainer>
@@ -152,6 +243,7 @@ const Searchbar = () => {
               placeholder="country"
               options={countryOptions}
               onChange={onCountryChange}
+              isDisabled={disable}
             />
           }
         </Dropdown>
@@ -161,6 +253,7 @@ const Searchbar = () => {
               placeholder="category"
               options={categoriesOptions}
               onChange={onCategoryChange}
+              isDisabled={disable}
             />
           }
         </Dropdown>
@@ -168,17 +261,18 @@ const Searchbar = () => {
           {
             <Select
               placeholder="sources"
-              options={categoriesOptions}
-              onChange={onCategoryChange}
+              options={sourcesOptions}
+              onChange={(value) => onSourcesChange(value)}
+              isMulti
             />
           }
         </Dropdown>
         <Dropdown>
           {
-            <Select
+            <Creatable
               placeholder="domain"
-              options={categoriesOptions}
-              onChange={onCategoryChange}
+              options={domains}
+              onChange={onDomainChange}
             />
           }
         </Dropdown>
@@ -187,7 +281,7 @@ const Searchbar = () => {
             <Select
               placeholder="language"
               options={langOptions}
-              onChange={onCategoryChange}
+              onChange={onLangChange}
             />
           }
         </Dropdown>
@@ -196,12 +290,12 @@ const Searchbar = () => {
             <Select
               placeholder="sortBy"
               options={sortOptions}
-              onChange={onCategoryChange}
+              onChange={onSortByChange}
             />
           }
         </Dropdown>
       </DropdownContainer>
-      <p>{qContent}</p>
+      <p>{url}</p>
     </SearchBarContainer>
   );
 };

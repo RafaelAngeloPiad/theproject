@@ -8,7 +8,7 @@ export const SearchBarContainer = styled.div`
 
 export const BtnContainer = styled.div``;
 
-export const AllBtn = styled.button``;
+export const SearchBtn = styled.button``;
 
 export const TopBtn = styled.button``;
 

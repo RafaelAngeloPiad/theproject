@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-
 // https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=068c33e9fdfe488e8c2829ec5e8069a4
 
-const apiKey = "e6ba7f00ce054bfca62e6e40ce9e05d8";
+export const apiKey = "068c33e9fdfe488e8c2829ec5e8069a4";
+
 const linkStart = "https://newsapi.org/v2/";
+export const sourcesLink = `${linkStart}v2/top-headlines/sources?apiKey=${apiKey}`;
 
 //ang gawin mo pag hindi top headlines, automatic everything na yun.
 
@@ -36,18 +36,49 @@ const UrlManager = (
   sortBy
 ) => {
   if (endPoint === "everything") {
+    //if wala laman or unang render
     if (sources === "") {
       if (domains === "") {
         if (q === "") {
-          console.log(
-            "please provide either SOURCES, DOMAINS OR SEARCH PARAMETER to find an article"
-          );
+          return "please provide either SOURCES, DOMAINS OR SEARCH PARAMETER to find an article";
         }
       }
     }
+
+    if (sources != "" && domains != "" && language != "" && sortBy != "") {
+      return `${linkStart}${endPoint}?sources=${sources}`;
+    }
   }
 
-  return linkStart + "everything?" + "q=" + q + "&" + apiKey;
+  const stringSources = (sources) => {
+    var cnt = 0;
+    var sourcesString = "";
+
+    while (sources[cnt] != null) {
+      sourcesString += sources[cnt].value + ",";
+      cnt++;
+    }
+    return sourcesString.substring(0, sourcesString.length - 1);
+  };
+  //linkStart + endpoint + "q=" + q + "&" + apiKey
+  return (
+    " endPoint : " +
+    endPoint +
+    " q : " +
+    q +
+    " country : " +
+    country +
+    " category : " +
+    category +
+    " sources : " +
+    stringSources(sources) +
+    " domains : " +
+    domains +
+    " language : " +
+    language +
+    " sortBy : " +
+    sortBy
+  );
 };
 
 export default UrlManager;

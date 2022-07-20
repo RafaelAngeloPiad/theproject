@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Searchbar from "./components/Searchbar";
+
 import Headlines from "./pages/Headlines.js";
 import Everything from "./pages/Everything.js";
 //import FullBlog from "./pages/FullBlog.js";
@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Navbar />
-    <Searchbar />
+
     <Routes>
       <Route path="/" exact element={<Headlines />} />
       <Route path="/Headlines" exact element={<Headlines />} />

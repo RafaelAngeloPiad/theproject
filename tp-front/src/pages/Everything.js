@@ -1,39 +1,46 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import useFetchArticles from "../components/useFetchArticles";
+import Searchbar from "../components/Searchbar";
 
 const Blogs = () => {
-  const url =
-    "https://newsapi.org/v2/everything?domains=inquirer.net&apiKey=e6ba7f00ce054bfca62e6e40ce9e05d8";
+  const url = `https://newsapi.org/v2/everything?domains=inquirer.net&apiKey=068c33e9fdfe488e8c2829ec5e8069a4`;
 
   const { data: articles, isPending, error } = useFetchArticles(url);
 
   //const articles = data.articles;
 
   return (
-    <div className="art-prev-container">
-      {isPending && <div>LOADING</div>}
+    <div>
+      <Searchbar endPoint="everything" disable={true} />
+      <div className="art-prev-container">
+        {isPending && <div>LOADING</div>}
 
-      {error && <div>THERE IS AN ERROR</div>}
+        {error && <div>THERE IS AN ERROR</div>}
 
-      {articles &&
-        articles.map((article) => (
-          <a className="art-prev-link" href={`${article.url}`} target="_blank">
-            <div className="art-prev-block">
-              <label className="art-prev-title">{article.title}</label>
-              <label className="art-prev-author">{article.author}</label>
-              <label className="art-prev-publishedAt">
-                {article.publishedAt}
-              </label>
-              <img
-                className="art-prev-img"
-                src={article.urlToImage}
-                alt={article.title}
-              />
-              <p className="art-prev-desc">{article.description}</p>
-            </div>
-          </a>
-        ))}
+        {articles &&
+          articles.map((article) => (
+            <a
+              className="art-prev-link"
+              href={`${article.url}`}
+              target="_blank"
+            >
+              <div className="art-prev-block">
+                <label className="art-prev-title">{article.title}</label>
+                <label className="art-prev-author">{article.author}</label>
+                <label className="art-prev-publishedAt">
+                  {article.publishedAt}
+                </label>
+                <img
+                  className="art-prev-img"
+                  src={article.urlToImage}
+                  alt={article.title}
+                />
+                <p className="art-prev-desc">{article.description}</p>
+              </div>
+            </a>
+          ))}
+      </div>
     </div>
   );
 };

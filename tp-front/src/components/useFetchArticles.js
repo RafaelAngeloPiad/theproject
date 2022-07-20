@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useFetch = (url) => {
+const useFetchArticles = (url) => {
   //use effect runs every render
 
   const [data, setData] = useState(null);
@@ -41,4 +41,4 @@ const useFetch = (url) => {
   return { data, isPending, error };
 };
 
-export default useFetch;
+export default useFetchArticles;

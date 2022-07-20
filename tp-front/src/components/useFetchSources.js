@@ -22,19 +22,14 @@ const useFetchSources = (url) => {
         var sourceIds = [];
 
         while (data.sources[cnt] != null) {
-          sourceIds.push(data.sources[cnt].id);
+          sourceIds.push({
+            label: data.sources[cnt].name,
+            value: data.sources[cnt].id,
+          });
           cnt++;
         }
 
         setData(sourceIds);
-
-        //setArticleStack((oldArticleStack) => [
-        //         ...oldArticleStack,
-        //         data.articles
-        //       ]);
-
-        setIsPending(false);
-        setError(null);
       })
       .catch((err) => {
         setIsPending(false);
@@ -52,7 +47,7 @@ const useFetchSources = (url) => {
     return () => abortCont.abort();
   }, []);
 
-  return { data, isPending, error };
+  return { data };
 };
 
 export default useFetchSources;
