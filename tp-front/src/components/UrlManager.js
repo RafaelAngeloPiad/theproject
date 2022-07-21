@@ -35,6 +35,17 @@ const UrlManager = (
   language,
   sortBy
 ) => {
+  const stringifyArray = (sources) => {
+    var cnt = 0;
+    var sourcesString = "";
+
+    while (sources[cnt] != null) {
+      sourcesString += sources[cnt].value + ",";
+      cnt++;
+    }
+    return sourcesString.substring(0, sourcesString.length - 1);
+  };
+
   if (endPoint === "everything") {
     //if wala laman or unang render
     if (sources === "") {
@@ -45,21 +56,15 @@ const UrlManager = (
       }
     }
 
-    if (sources != "" && domains != "" && language != "" && sortBy != "") {
-      return `${linkStart}${endPoint}?sources=${sources}`;
+    if (sources !== "" && domains !== "" && language !== "" && sortBy !== "") {
+      return `${linkStart}${endPoint}?sources=${stringifyArray(
+        sources
+      )}&domains=${stringifyArray(
+        domains
+      )}&language=${language}&sortBy=${sortBy}&apiKey=${apiKey}`;
     }
   }
 
-  const stringSources = (sources) => {
-    var cnt = 0;
-    var sourcesString = "";
-
-    while (sources[cnt] != null) {
-      sourcesString += sources[cnt].value + ",";
-      cnt++;
-    }
-    return sourcesString.substring(0, sourcesString.length - 1);
-  };
   //linkStart + endpoint + "q=" + q + "&" + apiKey
   return (
     " endPoint : " +
@@ -71,9 +76,9 @@ const UrlManager = (
     " category : " +
     category +
     " sources : " +
-    stringSources(sources) +
+    stringifyArray(sources) +
     " domains : " +
-    domains +
+    stringifyArray(domains) +
     " language : " +
     language +
     " sortBy : " +

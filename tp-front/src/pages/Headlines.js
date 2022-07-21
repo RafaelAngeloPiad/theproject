@@ -1,10 +1,12 @@
 import React from "react";
 import Searchbar from "../components/Searchbar";
+import Register from "../components/Register";
 
 const Home = () => {
   return (
     <div>
       <Searchbar endPoint="top-headlines" disable={false} />
+      <Register />
       <div className="home-block">
         <h1>Welcome to Basic Blog Viewer</h1>
 

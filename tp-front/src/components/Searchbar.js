@@ -1,11 +1,7 @@
-import React, { useRef } from "react";
-import Select from "react-select";
-import { useState, useEffect } from "react";
-import Creatable, { useCreatable } from "react-select/creatable";
-import AsyncSelect from "react-select/async";
+import Creatable from "react-select/creatable";
+import Select, { components } from "react-select";
+import { useState, useEffect, useRef } from "react";
 import UrlManager, { sourcesLink } from "./UrlManager";
-import useFetchArticles from "./useFetchArticles";
-import useFetchSources from "./useFetchSources";
 
 import {
   Dropdown,
@@ -132,9 +128,10 @@ const Searchbar = ({ endPoint, disable }) => {
     console.log(selectedOption);
     setSources(selectedOption);
   };
-  const onDomainChange = (selectedOption) => {
-    console.log(selectedOption.value);
-    setDomains(selectedOption.value);
+
+  const onDomainsChange = (value) => {
+    console.log(value);
+    setDomains(value);
   };
 
   const onLangChange = (selectedOption) => {
@@ -145,6 +142,14 @@ const Searchbar = ({ endPoint, disable }) => {
   const onSortByChange = (selectedOption) => {
     console.log(selectedOption.value);
     setSortBy(selectedOption.value);
+  };
+
+  const NoOptionsMessage = (props) => {
+    return (
+      <components.NoOptionsMessage {...props}>
+        <span>Enter a News Domain Website</span>
+      </components.NoOptionsMessage>
+    );
   };
 
   const linkUpdate = () => {
@@ -163,6 +168,7 @@ const Searchbar = ({ endPoint, disable }) => {
   };
   //sources muna bago mag language[]
   //https://github.com/mdeveloper20/reactReminder/blob/react-select-creatable/src/Register/Register.js para to sa search nung sa domains
+  //pag may domains na wag na mag sources
 
   const getSources = () => {
     fetch(
@@ -270,9 +276,12 @@ const Searchbar = ({ endPoint, disable }) => {
         <Dropdown>
           {
             <Creatable
-              placeholder="domain"
-              options={domains}
-              onChange={onDomainChange}
+              isClearable
+              isMulti
+              placeholder="domains"
+              onChange={(value) => onDomainsChange(value)}
+              components={{ DropdownIndicator: null, NoOptionsMessage }}
+              value={domains}
             />
           }
         </Dropdown>
