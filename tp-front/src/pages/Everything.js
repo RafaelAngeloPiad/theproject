@@ -12,7 +12,12 @@ const Blogs = () => {
 
   return (
     <div>
-      <Searchbar endPoint="everything" disable={true} />
+      <Searchbar
+        endPoint="everything"
+        countryDisable={true}
+        categoryDisable={true}
+        domainsDisable={false}
+      />
       <div className="art-prev-container">
         {isPending && <div>LOADING</div>}
 

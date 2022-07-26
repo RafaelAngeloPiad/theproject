@@ -5,8 +5,13 @@ import Register from "../components/Register";
 const Home = () => {
   return (
     <div>
-      <Searchbar endPoint="top-headlines" disable={false} />
-      <Register />
+      <Searchbar
+        endPoint="top-headlines"
+        countryDisable={false}
+        categoryDisable={false}
+        domainsDisable={true}
+      />
+
       <div className="home-block">
         <h1>Welcome to Basic Blog Viewer</h1>
 

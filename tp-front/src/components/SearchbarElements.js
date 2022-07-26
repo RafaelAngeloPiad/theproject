@@ -12,6 +12,8 @@ export const SearchBtn = styled.button``;
 
 export const TopBtn = styled.button``;
 
+export const ClearBtn = styled.button``;
+
 export const SearchFieldContainer = styled.div`
   background-color: red;
   display: flex;

@@ -11,19 +11,30 @@ import {
   SearchFieldContainer,
   BtnContainer,
   SearchBtn,
+  ClearBtn,
 } from "./SearchbarElements";
 
-const Searchbar = ({ endPoint, disable }) => {
+const Searchbar = ({
+  endPoint,
+  countryDisable,
+  categoryDisable,
+  domainsDisable,
+}) => {
   const [url, setUrl] = useState("");
   const [qContent, setQ] = useState("");
   const [country, setCountry] = useState("");
   const [category, setCategory] = useState("");
   const [sources, setSources] = useState([]);
   const [sourcesOptions, setSourcesOptions] = useState([]);
-  const [domains, setDomains] = useState("");
+  const [domains, setDomains] = useState([]);
   const [language, setLanguage] = useState("");
   const [sortBy, setSortBy] = useState("");
   const searchBarInput = useRef();
+  const [sourceDisabled, setSourcesDisabled] = useState(false);
+  const [domainDisabled, setDomainDisabled] = useState(domainsDisable);
+  const [countryDisabled, setCountryDisabled] = useState(countryDisable);
+  const [categoryDisabled, setCategoryDisabled] = useState(categoryDisable);
+  const [sortDisabled, setSortDisabled] = useState(true);
 
   const countryOptions = [
     { value: "ar", label: "Argentina" },
@@ -113,35 +124,92 @@ const Searchbar = ({ endPoint, disable }) => {
     { value: "popularity", label: "Popularity" },
     { value: "publishedAt", label: "Newest" },
   ];
-
+  ////////////////////////////////////////////////////////////problema mo ngayon ay hindi nagrerefresh yung useeffect pag nagclear ka ng inputs
   const onCountryChange = (selectedOption) => {
-    console.log(selectedOption.value);
-    setCountry(selectedOption.value);
+    setSortDisabled(false);
+    if (selectedOption === null) {
+      setCountry("");
+    } else {
+      console.log(selectedOption.value);
+      setCountry(selectedOption.value);
+    }
+
+    if (endPoint === "top-headlines") {
+      if (selectedOption === "" || selectedOption === null) {
+        setSourcesDisabled(false);
+      } else {
+        setSourcesDisabled(true);
+      }
+    }
   };
 
   const onCategoryChange = (selectedOption) => {
-    console.log(selectedOption.value);
-    setCategory(selectedOption.value);
+    setSortDisabled(false);
+    if (selectedOption === null) {
+      setCategory("");
+    } else {
+      console.log(selectedOption.value);
+      setCategory(selectedOption.value);
+    }
+
+    if (endPoint === "top-headlines") {
+      if (selectedOption === "" || selectedOption === null) {
+        setSourcesDisabled(false);
+      } else {
+        setSourcesDisabled(true);
+      }
+    }
   };
 
   const onSourcesChange = (selectedOption) => {
+    setSortDisabled(false);
     console.log(selectedOption);
     setSources(selectedOption);
+
+    if (selectedOption === "") {
+      setDomainDisabled(false);
+    } else {
+      setDomainDisabled(true);
+      if (endPoint === "top-headlines") {
+        if (selectedOption.length !== 0) {
+          setCountryDisabled(true);
+          setCategoryDisabled(true);
+        } else {
+          setCountryDisabled(false);
+          setCategoryDisabled(false);
+        }
+      }
+    }
   };
 
   const onDomainsChange = (value) => {
+    setSortDisabled(false);
     console.log(value);
     setDomains(value);
+    if (value === "") {
+      setSourcesDisabled(false);
+    } else {
+      setSourcesDisabled(true);
+    }
   };
 
   const onLangChange = (selectedOption) => {
-    console.log(selectedOption.value);
-    setLanguage(selectedOption.value);
+    setSortDisabled(false);
+    if (selectedOption === null) {
+      setLanguage("");
+    } else {
+      console.log(selectedOption.value);
+      setLanguage(selectedOption.value);
+    }
   };
 
   const onSortByChange = (selectedOption) => {
-    console.log(selectedOption.value);
-    setSortBy(selectedOption.value);
+    if (selectedOption === null) {
+      setSortBy("");
+    } else {
+      console.log(selectedOption.value);
+      setSortBy(selectedOption.value);
+    }
   };
 
   const NoOptionsMessage = (props) => {
@@ -152,20 +220,6 @@ const Searchbar = ({ endPoint, disable }) => {
     );
   };
 
-  const linkUpdate = () => {
-    setUrl(
-      UrlManager(
-        endPoint,
-        qContent,
-        country,
-        category,
-        sources,
-        domains,
-        language,
-        sortBy
-      )
-    );
-  };
   //sources muna bago mag language[]
   //https://github.com/mdeveloper20/reactReminder/blob/react-select-creatable/src/Register/Register.js para to sa search nung sa domains
   //pag may domains na wag na mag sources
@@ -235,10 +289,22 @@ const Searchbar = ({ endPoint, disable }) => {
           <SearchBtn
             onClick={(event) => {
               setQ(searchBarInput.current.value);
+              console.log(qContent);
+              setSortDisabled(false);
             }}
           >
             Search
           </SearchBtn>
+          <ClearBtn
+            onClick={(event) => {
+              setQ("");
+              console.log(qContent);
+              searchBarInput.current.value = "";
+              setSortDisabled(true);
+            }}
+          >
+            Clear
+          </ClearBtn>
         </BtnContainer>
       </SearchFieldContainer>
 
@@ -246,29 +312,33 @@ const Searchbar = ({ endPoint, disable }) => {
         <Dropdown>
           {
             <Select
+              isClearable
               placeholder="country"
               options={countryOptions}
               onChange={onCountryChange}
-              isDisabled={disable}
+              isDisabled={countryDisabled}
             />
           }
         </Dropdown>
         <Dropdown>
           {
             <Select
+              isClearable
               placeholder="category"
               options={categoriesOptions}
               onChange={onCategoryChange}
-              isDisabled={disable}
+              isDisabled={categoryDisabled}
             />
           }
         </Dropdown>
         <Dropdown>
           {
             <Select
+              isClearable
               placeholder="sources"
               options={sourcesOptions}
               onChange={(value) => onSourcesChange(value)}
+              isDisabled={sourceDisabled}
               isMulti
             />
           }
@@ -282,12 +352,14 @@ const Searchbar = ({ endPoint, disable }) => {
               onChange={(value) => onDomainsChange(value)}
               components={{ DropdownIndicator: null, NoOptionsMessage }}
               value={domains}
+              isDisabled={domainDisabled}
             />
           }
         </Dropdown>
         <Dropdown>
           {
             <Select
+              isClearable
               placeholder="language"
               options={langOptions}
               onChange={onLangChange}
@@ -297,9 +369,11 @@ const Searchbar = ({ endPoint, disable }) => {
         <Dropdown>
           {
             <Select
+              isClearable
               placeholder="sortBy"
               options={sortOptions}
               onChange={onSortByChange}
+              isDisabled={sortDisabled}
             />
           }
         </Dropdown>
