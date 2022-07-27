@@ -57,6 +57,69 @@ const UrlManager = (
   var apiLink = `apiKey=${apiKey}`;
 
   if (endPoint === "everything") {
+    if (sources.length !== 0) {
+      if (q !== "" && language !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${qLink}&${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q !== "" && language !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${qLink}&${languageLink}&${apiLink}`;
+      } else if (q !== "" && language === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${qLink}&${sortByLink}&${apiLink}`;
+      } else if (q !== "" && language === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${qLink}&${apiLink}`;
+      } else if (q === "" && language !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q === "" && language !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${languageLink}&${apiLink}`;
+      } else if (q === "" && language === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${sortByLink}&${apiLink}`;
+      } else if (q === "" && language === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${sourcesLink}&${apiLink}`;
+      } //disable sortby pag wala pang any sort of input on all of them dear
+    } else if (domains.length !== 0) {
+      if (q !== "" && language !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${qLink}&${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q !== "" && language !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${qLink}&${languageLink}&${apiLink}`;
+      } else if (q !== "" && language === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${qLink}&${sortByLink}&${apiLink}`;
+      } else if (q !== "" && language === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${qLink}&${apiLink}`;
+      } else if (q === "" && language !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q === "" && language !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${languageLink}&${apiLink}`;
+      } else if (q === "" && language === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${sortByLink}&${apiLink}`;
+      } else if (q === "" && language === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${domainsLink}&${apiLink}`;
+      } //disable sortby pag wala pang any sort of input on all of them dear
+    } else if (language !== "") {
+      if (q !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${languageLink}&${apiLink}`;
+      } else if (q !== "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${apiLink}`;
+      } else if (q === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${languageLink}&${apiLink}`;
+      } else if (q === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${languageLink}&${sortByLink}&${apiLink}`;
+      } else if (q === "" && sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${languageLink}&${apiLink}`;
+      } else if (q === "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${sortByLink}&${apiLink}`;
+      } else if (q !== "" && sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${sortByLink}&${apiLink}`;
+      } //query lang at sort by
+    } else if (q !== "") {
+      if (sortBy !== "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${sortByLink}&${apiLink}`;
+      } else if (sortBy === "") {
+        masterUrl = `${linkStart}${endPoint}?${qLink}&${apiLink}`;
+      } //wala kahit ano
+    } else {
+      masterUrl = "";
+    }
   } else if (endPoint === "top-headlines") {
     //meron lahat
     //hindi pwede imix yung sources with country or category.
@@ -178,7 +241,7 @@ const UrlManager = (
       } else if (q !== "" && sortBy === "") {
         masterUrl = `${linkStart}${endPoint}?${qLink}&${apiLink}`;
       } else if (q === "" && sortBy === "") {
-        masterUrl = `${linkStart}${endPoint}?${language}&${apiLink}`;
+        masterUrl = `${linkStart}${endPoint}?${languageLink}&${apiLink}`;
       } else if (q === "" && sortBy !== "") {
         masterUrl = `${linkStart}${endPoint}?${languageLink}&${sortByLink}&${apiLink}`;
       } else if (q === "" && sortBy === "") {
@@ -187,13 +250,15 @@ const UrlManager = (
         masterUrl = `${linkStart}${endPoint}?${sortByLink}&${apiLink}`;
       } else if (q !== "" && sortBy !== "") {
         masterUrl = `${linkStart}${endPoint}?${qLink}&${sortByLink}&${apiLink}`;
-      }
+      } //query lang at sort by
     } else if (q !== "") {
       if (sortBy !== "") {
         masterUrl = `${linkStart}${endPoint}?${qLink}&${sortByLink}&${apiLink}`;
       } else if (sortBy === "") {
         masterUrl = `${linkStart}${endPoint}?${qLink}&${apiLink}`;
-      }
+      } //wala kahit ano
+    } else {
+      masterUrl = "";
     }
   }
   //masterUrl = `${linkStart}${endPoint}?${domainsLink}&${countryLink}&${categoryLink}&${languageLink}&${sortByLink}&${apiLink}`;

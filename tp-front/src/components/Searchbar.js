@@ -166,7 +166,7 @@ const Searchbar = ({
     console.log(selectedOption);
     setSources(selectedOption);
 
-    if (selectedOption === "") {
+    if (selectedOption.length === 0) {
       setDomainDisabled(false);
     } else {
       setDomainDisabled(true);
@@ -182,11 +182,11 @@ const Searchbar = ({
     }
   };
 
-  const onDomainsChange = (value) => {
+  const onDomainsChange = (selectedOption) => {
     setSortDisabled(false);
-    console.log(value);
-    setDomains(value);
-    if (value === "") {
+    console.log(selectedOption);
+    setDomains(selectedOption);
+    if (selectedOption.length === 0) {
       setSourcesDisabled(false);
     } else {
       setSourcesDisabled(true);
