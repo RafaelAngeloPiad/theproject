@@ -1,56 +1,30 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import useFetchArticles from "../components/useFetchArticles";
+
 import Searchbar from "../components/Searchbar";
 
-const Blogs = () => {
-  const url = `https://newsapi.org/v2/everything?domains=inquirer.net&apiKey=068c33e9fdfe488e8c2829ec5e8069a4`;
-
-  const { data: articles, isPending, error } = useFetchArticles(url);
-
-  //const articles = data.articles;
+const Everything = () => {
+  //const url = `https://newsapi.org/v2/everything?domains=inquirer.net&apiKey=068c33e9fdfe488e8c2829ec5e8069a4`;
 
   return (
     <div>
+      <div className="home-block">
+        <h1>
+          Look through all existing Up to Date Articles around the world from
+          NEWSAPI
+        </h1>
+      </div>
+
       <Searchbar
         endPoint="everything"
         countryDisable={true}
         categoryDisable={true}
         domainsDisable={false}
       />
-      <div className="art-prev-container">
-        {isPending && <div>LOADING</div>}
-
-        {error && <div>THERE IS AN ERROR</div>}
-
-        {articles &&
-          articles.map((article) => (
-            <a
-              className="art-prev-link"
-              href={`${article.url}`}
-              target="_blank"
-            >
-              <div className="art-prev-block">
-                <label className="art-prev-title">{article.title}</label>
-                <label className="art-prev-author">{article.author}</label>
-                <label className="art-prev-publishedAt">
-                  {article.publishedAt}
-                </label>
-                <img
-                  className="art-prev-img"
-                  src={article.urlToImage}
-                  alt={article.title}
-                />
-                <p className="art-prev-desc">{article.description}</p>
-              </div>
-            </a>
-          ))}
-      </div>
     </div>
   );
 };
 
-export default Blogs;
+export default Everything;
 
 /*
         https://newsapi.org/v2/everything?q=apple&from=2022-07-07&to=2022-07-07&sortBy=popularity&apiKey=068c33e9fdfe488e8c2829ec5e8069a4

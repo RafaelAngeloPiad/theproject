@@ -13,6 +13,7 @@ import {
   SearchBtn,
   ClearBtn,
 } from "./SearchbarElements";
+import GetBlogs from "../pages/GetBlogs";
 
 const Searchbar = ({
   endPoint,
@@ -170,14 +171,14 @@ const Searchbar = ({
       setDomainDisabled(false);
     } else {
       setDomainDisabled(true);
-      if (endPoint === "top-headlines") {
-        if (selectedOption.length !== 0) {
-          setCountryDisabled(true);
-          setCategoryDisabled(true);
-        } else {
-          setCountryDisabled(false);
-          setCategoryDisabled(false);
-        }
+    }
+    if (endPoint === "top-headlines") {
+      if (selectedOption.length !== 0) {
+        setCountryDisabled(true);
+        setCategoryDisabled(true);
+      } else {
+        setCountryDisabled(false);
+        setCategoryDisabled(false);
       }
     }
   };
@@ -281,105 +282,111 @@ const Searchbar = ({
   ]);
 
   return (
-    <SearchBarContainer>
-      <SearchFieldContainer>
-        <SearchField placeholder="search" ref={searchBarInput} />
+    <div>
+      <SearchBarContainer>
+        <SearchFieldContainer>
+          <SearchField
+            placeholder="search using a keyword"
+            ref={searchBarInput}
+          />
 
-        <BtnContainer>
-          <SearchBtn
-            onClick={(event) => {
-              setQ(searchBarInput.current.value);
-              console.log(qContent);
-              setSortDisabled(false);
-            }}
-          >
-            Search
-          </SearchBtn>
-          <ClearBtn
-            onClick={(event) => {
-              setQ("");
-              console.log(qContent);
-              searchBarInput.current.value = "";
-              setSortDisabled(true);
-            }}
-          >
-            Clear
-          </ClearBtn>
-        </BtnContainer>
-      </SearchFieldContainer>
+          <BtnContainer>
+            <SearchBtn
+              onClick={(event) => {
+                setQ(searchBarInput.current.value);
+                console.log(qContent);
+                setSortDisabled(false);
+              }}
+            >
+              Search
+            </SearchBtn>
+            <br />
+            <ClearBtn
+              onClick={(event) => {
+                setQ("");
+                console.log(qContent);
+                searchBarInput.current.value = "";
+              }}
+            >
+              Clear
+            </ClearBtn>
+          </BtnContainer>
+        </SearchFieldContainer>
 
-      <DropdownContainer>
-        <Dropdown>
-          {
-            <Select
-              isClearable
-              placeholder="country"
-              options={countryOptions}
-              onChange={onCountryChange}
-              isDisabled={countryDisabled}
-            />
-          }
-        </Dropdown>
-        <Dropdown>
-          {
-            <Select
-              isClearable
-              placeholder="category"
-              options={categoriesOptions}
-              onChange={onCategoryChange}
-              isDisabled={categoryDisabled}
-            />
-          }
-        </Dropdown>
-        <Dropdown>
-          {
-            <Select
-              isClearable
-              placeholder="sources"
-              options={sourcesOptions}
-              onChange={(value) => onSourcesChange(value)}
-              isDisabled={sourceDisabled}
-              isMulti
-            />
-          }
-        </Dropdown>
-        <Dropdown>
-          {
-            <Creatable
-              isClearable
-              isMulti
-              placeholder="domains"
-              onChange={(value) => onDomainsChange(value)}
-              components={{ DropdownIndicator: null, NoOptionsMessage }}
-              value={domains}
-              isDisabled={domainDisabled}
-            />
-          }
-        </Dropdown>
-        <Dropdown>
-          {
-            <Select
-              isClearable
-              placeholder="language"
-              options={langOptions}
-              onChange={onLangChange}
-            />
-          }
-        </Dropdown>
-        <Dropdown>
-          {
-            <Select
-              isClearable
-              placeholder="sortBy"
-              options={sortOptions}
-              onChange={onSortByChange}
-              isDisabled={sortDisabled}
-            />
-          }
-        </Dropdown>
-      </DropdownContainer>
-      <p>{url}</p>
-    </SearchBarContainer>
+        <DropdownContainer>
+          <Dropdown>
+            {
+              <Select
+                isClearable
+                placeholder="country"
+                options={countryOptions}
+                onChange={onCountryChange}
+                isDisabled={countryDisabled}
+              />
+            }
+          </Dropdown>
+          <Dropdown>
+            {
+              <Select
+                isClearable
+                placeholder="category"
+                options={categoriesOptions}
+                onChange={onCategoryChange}
+                isDisabled={categoryDisabled}
+              />
+            }
+          </Dropdown>
+          <Dropdown>
+            {
+              <Select
+                isClearable
+                placeholder="sources"
+                options={sourcesOptions}
+                onChange={(value) => onSourcesChange(value)}
+                isDisabled={sourceDisabled}
+                isMulti
+              />
+            }
+          </Dropdown>
+          <Dropdown>
+            {
+              <Creatable
+                isClearable
+                isMulti
+                placeholder="domains"
+                onChange={(value) => onDomainsChange(value)}
+                components={{ DropdownIndicator: null, NoOptionsMessage }}
+                value={domains}
+                isDisabled={domainDisabled}
+              />
+            }
+          </Dropdown>
+          <Dropdown>
+            {
+              <Select
+                isClearable
+                placeholder="language"
+                options={langOptions}
+                onChange={onLangChange}
+              />
+            }
+          </Dropdown>
+          <Dropdown>
+            {
+              <Select
+                isClearable
+                placeholder="sortBy"
+                options={sortOptions}
+                onChange={onSortByChange}
+                isDisabled={sortDisabled}
+              />
+            }
+          </Dropdown>
+        </DropdownContainer>
+        <p className="url-preview">{url}</p>
+      </SearchBarContainer>
+      {url && <GetBlogs url={url} />}
+    </div>
   );
 };
 

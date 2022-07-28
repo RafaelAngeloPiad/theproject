@@ -6,6 +6,7 @@ const useFetchArticles = (url) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+  const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
     const abortCont = new AbortController();
@@ -18,6 +19,7 @@ const useFetchArticles = (url) => {
         return res.json();
       })
       .then((data) => {
+        setTotalResults(data.totalResults);
         setData(data.articles);
         setIsPending(false);
         setError(null);
@@ -38,7 +40,7 @@ const useFetchArticles = (url) => {
     return () => abortCont.abort();
   }, [url]);
 
-  return { data, isPending, error };
+  return { data, totalResults, isPending, error };
 };
 
 export default useFetchArticles;

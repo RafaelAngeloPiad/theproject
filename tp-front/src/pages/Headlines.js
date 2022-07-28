@@ -1,40 +1,21 @@
 import React from "react";
 import Searchbar from "../components/Searchbar";
-import Register from "../components/Register";
 
-const Home = () => {
+const Headlines = () => {
   return (
     <div>
+      <div className="home-block">
+        <h1>
+          Search through The Latest Top Headlines around the world from NEWSAPI
+        </h1>
+      </div>
+
       <Searchbar
         endPoint="top-headlines"
         countryDisable={false}
         categoryDisable={false}
         domainsDisable={true}
       />
-
-      <div className="home-block">
-        <h1>Welcome to Basic Blog Viewer</h1>
-
-        <h2>Browse through recent articles</h2>
-
-        <h3>
-          All articles mentioning Apple from yesterday, sorted by popular
-          publishers first
-        </h3>
-
-        <h3>
-          All articles about Tesla from the last month, sorted by recent first
-        </h3>
-
-        <h3>Top business headlines in the US right now</h3>
-
-        <h3>Top headlines from TechCrunch right now</h3>
-
-        <h3>
-          All articles published by the Wall Street Journal in the last 6
-          months, sorted by recent
-        </h3>
-      </div>
     </div>
     /*
         https://newsapi.org/v2/everything?q=apple&from=2022-07-07&to=2022-07-07&sortBy=popularity&apiKey=068c33e9fdfe488e8c2829ec5e8069a4
@@ -52,4 +33,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Headlines;
